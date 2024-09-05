@@ -1,8 +1,11 @@
+use std::time::Duration;
+
 use anathema::backend::tui::TuiBackend;
 use anathema::component::{Component, KeyEvent, MouseEvent};
 use anathema::runtime::Runtime;
 use anathema::state::{State, Value};
 use anathema::templates::{Document, ToSourceKind};
+use anathema::widgets::components::events::KeyState;
 use anathema::widgets::components::Context;
 use anathema::widgets::Elements;
 
@@ -42,11 +45,13 @@ impl Component for BitEnabled {
         mut _elements: Elements<'_, '_>,
         mut _context: Context<'_, Self::State>,
     ) {
-        match key.get_char() {
-            Some(' ') => {
-                state.enabled = (!state.enabled.to_bool()).into();
+        if let KeyState::Press = key.state {
+            match key.get_char() {
+                Some(' ') => {
+                    state.enabled = (!state.enabled.to_bool()).into();
+                }
+                _ => (),
             }
-            _ => (),
         }
     }
 
