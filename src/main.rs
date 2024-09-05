@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use anathema::backend::tui::TuiBackend;
 use anathema::component::{Component, KeyEvent, MouseEvent};
 use anathema::runtime::Runtime;
@@ -48,7 +46,8 @@ impl Component for BitEnabled {
         if let KeyState::Press = key.state {
             match key.get_char() {
                 Some(' ') => {
-                    state.enabled = (!state.enabled.to_bool()).into();
+                    let mut enabled = state.enabled.to_mut();
+                    *enabled = !*enabled;
                 }
                 _ => (),
             }
@@ -63,7 +62,8 @@ impl Component for BitEnabled {
         mut _context: Context<'_, Self::State>,
     ) {
         if mouse.lsb_down() {
-            state.enabled = (!state.enabled.to_bool()).into();
+            let mut enabled = state.enabled.to_mut();
+            *enabled = !*enabled;
         }
     }
 }
