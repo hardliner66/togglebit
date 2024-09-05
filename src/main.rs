@@ -1,12 +1,13 @@
-use std::fs::read_to_string;
-
 use anathema::backend::tui::TuiBackend;
 use anathema::component::{Component, KeyEvent, MouseEvent};
 use anathema::runtime::Runtime;
 use anathema::state::{State, Value};
-use anathema::templates::Document;
+use anathema::templates::{Document, ToSourceKind};
 use anathema::widgets::components::Context;
 use anathema::widgets::Elements;
+
+static MAIN_TEMPLATE: &str = include_str!("../main.aml");
+static TOGGLEBIT_TEMPLATE: &str = include_str!("../templates/togglebit.aml");
 
 #[derive(State)]
 struct BitEnabledState {
@@ -63,9 +64,7 @@ impl Component for BitEnabled {
 }
 
 fn main() {
-    let template = read_to_string("main.aml").unwrap();
-
-    let doc = Document::new(template);
+    let doc = Document::new(MAIN_TEMPLATE);
 
     let backend = TuiBackend::builder()
         .enable_alt_screen()
@@ -79,7 +78,7 @@ fn main() {
     runtime
         .register_prototype(
             "togglebit",
-            "templates/togglebit.aml",
+            TOGGLEBIT_TEMPLATE.to_template(),
             || BitEnabled::new(),
             move || BitEnabledState::new(true),
         )
