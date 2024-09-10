@@ -49,14 +49,14 @@ struct BitEnabled {
     toggle1: Vec<char>,
 }
 
-fn randomize_chars(carnage: bool, rng: &mut ThreadRng, text: &mut Vec<char>) {
+fn randomize_chars(carnage: bool, rng: &mut ThreadRng, text: &mut [char]) {
     let mut index = rng.gen_range(0..text.len());
     while text[index] == '\n' && !carnage {
         index = rng.gen_range(0..text.len());
     }
     let value = text[index] as u32;
     let mut new_value = None;
-    while let None = new_value {
+    while new_value.is_none() {
         let next_value = value ^ (1 << rng.gen_range(0..32));
         if let Ok(a) = char::try_from(next_value) {
             if !carnage && a == '\n' {
@@ -116,11 +116,8 @@ impl Component for BitEnabled {
         mut _context: Context<'_, Self::State>,
     ) {
         if let KeyState::Press = key.state {
-            match key.get_char() {
-                Some(' ') => {
-                    self.change_state(state);
-                }
-                _ => (),
+            if let Some(' ') = key.get_char() {
+                self.change_state(state);
             }
         }
     }
