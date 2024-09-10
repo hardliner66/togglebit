@@ -1,8 +1,10 @@
 [package]
 name = "togglebit"
-version = "1.0.0"
+version = "2.0.0"
 
 edition = "2021"
 
 [dependencies]
-anathema = { git = "https://github.com/togglebyte/anathema/", branch = "dev" }
+anathema = { git = "https://github.com/togglebyte/anathema/" }
+clap = { version = "4.5.17", features = ["derive"] }
+rand = "0.8.5"
