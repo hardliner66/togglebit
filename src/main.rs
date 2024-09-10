@@ -152,7 +152,7 @@ impl GlobalEvents for Global {
                 code: KeyCode::Char('q'),
                 ..
             }) => Some(Event::Stop),
-            _ => None,
+            e => Some(e),
         }
     }
 }
